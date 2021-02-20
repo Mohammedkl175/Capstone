@@ -356,14 +356,14 @@ The API will return the following errors based on how the request fails:
    - requires `delete:movie` permission
  
  - Sample Request
-   - `https://casting-udacity-1993.herokuapp.com/movies/3`
+   - `https://casting-udacity-1993.herokuapp.com/movies/1`
 
 <details>
 <summary>Sample Response</summary>
 
 ```
 {
-    "deleted_movie_id": 3,
+    "deleted_movie_id": 1,
     "success": true
 }
 ```
