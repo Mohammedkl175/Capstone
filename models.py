@@ -21,8 +21,23 @@ def db_drop_and_create_all():
     drops the database tables and starts fresh
     can be used to initialize a clean database
     """
-    #db.drop_all()
+    db.drop_all()
     db.create_all()
+    init_record()
+
+def init_record():
+    actor1 = Actor('Haneen Tayseer',27,'Female')
+    actor1.insert()
+    actor2 = Actor('Mohammed Khalil',27,'Male')
+    actor2.insert()
+    actor3 = Actor('Hussam Khalil',29,'Male')
+    actor3.insert()
+    actor4 = Actor('Ibrahim Khalil',3,'Male')
+    actor4.insert()
+    movie1= Movie('Wolf of Wall Street',2013)
+    movie1.insert()
+    movie2 = Movie('The Shawshank Redemption',1994)
+    movie2.insert()
 
 class Movie(db.Model):
     __tablename__ = "movies"
