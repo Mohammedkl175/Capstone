@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-from models import setup_db, Actor, Movie
+from models import setup_db, Actor, Movie,db_drop_and_create_all
 from app import create_app
 
 
@@ -15,11 +15,12 @@ class CastingTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         setup_db(self.app,self.database_path)
+        db_drop_and_create_all()
 
         self.VALID_NEW_ACTOR = {
-            "name": "Haneen Tayseer",
-            "age": "27",
-            "gender":"Female"
+            "name": "Hisham Khalil",
+            "age": 30,
+            "gender":"Male"
         }
 
         self.INVALID_NEW_ACTOR = {
@@ -47,16 +48,10 @@ class CastingTestCase(unittest.TestCase):
 
         self.INVALID_UPDATE_MOVIE = {}
 
-        # binds the app to the current context
-        #with self.app.app_context():
-            #self.db = SQLAlchemy()
-            #self.db.init_app(self.app)
-            # create all tables
-            #self.db.create_all()
 
-    Assistant_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAzMDMwMjQ3YjQyOGMwMDZhNzU5YjYyIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODUxNjEzLCJleHAiOjE2MTM4NTg4MTMsImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyJdfQ.x0KDlY9s2kMXFpOI1dx8hmVH4uIJK_H9_SjjAldwSHuq34AJNyAovo7VUXddVFsAk15KQwOuIBtlLSfraP-PjxSP6TL2y6ZrZPGINhBApjKgBsp-INoAyn3DcOzyX7Z5tVdLHgAc1VO5zgr8DIDa8s_sa-VdY7j8PCt6hFpy7tq9BJA34dew42vAAGKsr1iU0eEAnhQ0yiQUjv0gBpByn5Yifyjuc_DvrNyWLPJ_qg8-KGhmHoiZ-thsAXF44ThhOoJ0nFk09Ie5wpTQuG0QrlpJuceQqZLqqYHq3xEfpG_-OiloNApVRGoj3ZHiDv-XwBDoIsq6Uu2bEaVy5hlJZg'
-    Director_Token='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAzMDJlYzA0YTdjNjMwMDY4OGNiYjJjIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODUxNTQ0LCJleHAiOjE2MTM4NTg3NDQsImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9yIl19.TUGhBcWzFgHYruxjoTfjfEQX0Mrd1XUg1_lgbwxeecNmedFLGna8RtnJ9YoL2a3nLjlpo1KgWRzYeP5L6mIFfWzGJWHDfQLbK6ENV8H5Y4IzK56qtO5_-GQWH_85UIiA3dzDoK19B_IBwtkhVCxijoAPNuGsJ5Rk2i4YNzk2o0TUNu-MabQ1s9K7jdQzO1DNLMGyPj4HdpaYyD7PVTc1l0jqO_vLgj6dWhMwIEeNFKabKtZM_5TOrJhmqa4XFQxcr1XbFk1FGbrERdIlYH1swZPogUnd5CTvnPkOpR8FLTYo4DwGRYLGD_3VEITb4fBSg8i_BLyiFE2sNJDtTw_Y3Q'
-    Producer_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAyNmE5YjQyMTQxMGQwMDcxMjc0ZGUxIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODUxNDMwLCJleHAiOjE2MTM4NTg2MzAsImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJkZWxldGU6bW92aWUiLCJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9yIiwicG9zdDptb3ZpZSJdfQ.1SLjLuPy3gM54O1e-j3O9bmYpZRUJ1TbYP5sAN1OwYJN7q3d1SQtKRxE7rIlokdZVwAXNO3Jj9rs7ZE9x09X-ubKWHdKBvej2viG8WSnDUv8Yv8xMzv9gJ9AMXuA3XIxeLj-mJ3IyZY021sp7_6kk2dmlUjtlqi6HZDV-YnAzBMjNJgbzd6iN6HmHKcJSr2Ru_5yoBn-h0zMaE00DNLdQnjqnYqEkndPFSAwCRWMg2T2QRFROZoEBVdCVI_D5F9SKe1QKN6ZgTJvNf8Ml2EbMTychf3El4kXe0XEJz93scwDCU6mOZpHCPmk3YS3rrw6VdJ-xmjsM7A0SqFYdf4vIA'
+    Assistant_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAzMDMwMjQ3YjQyOGMwMDZhNzU5YjYyIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODYxMjEwLCJleHAiOjE2MTM4Njg0MTAsImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyJdfQ.FWUbWsNgl5RbccwMNiXhSAS0dLG3lQh_wPldxZw2WU45T0cV5_ytdB4Crr-9_dhtaJm8YDWl7kz8BCxAYQU1ufgrWkhZZSSLcLC5_9hA9hhuMqOSptbfjLqYRJfcVwrEOuDq5TWiTMhue9AQzummjpWg0CsCXloJ3LkT-4gc9c1gEriALfoY5DUwMJxF5Uan4YiMP6YtuwXEf2sd-J5yd8CZ7kpfPVJQ8aBBly3GhDznktivsOwp587Nm9bdc3ZP5x5U433hm2EZ2vbllt5VF9Pi7TysDwkIb1UMA4aa6Y3st3ih2fo56oD40hoG7C2U_DA4A7z_Ib8X0TAPnCUN3A'
+    Director_Token='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAzMDJlYzA0YTdjNjMwMDY4OGNiYjJjIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODYxMTU5LCJleHAiOjE2MTM4NjgzNTksImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9yIl19.GMEkPSYqWiqqSngLtMytJti7Rk_yKggc7caV0VQCi39gRDzV9dDw-VBpSGyI6z_0nqdznNVCcHnoJiLIPCSUKRZPFOwFo1UBB6vG5FX4sb0bMBuRG0aikAsJ6EPLaRE8Xzvssw0OgYl-SbbpPl0nGMr8p5dq4oLWdWGT9PQVF9mw9XXJDuITnIYfUBd4UEGA1BOBctCqYT6xUX9wT_h3zrgJ12D1uT7GfiuBTDQJqwePh64-y_mRGOJ9Li1TTTB7VYHHz2BZCn38ub84jdUTF3pphTvQBdhlmn0A2txRUWsIStsBT88UkG5TNYAd-_qbbvoGiPZ0q7-bsNvZynwlSw'
+    Producer_Token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InJnbnJKMEdFUGhXaTh2U01wN1hLUiJ9.eyJpc3MiOiJodHRwczovL2Rldi0tLXZkMjlndy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjAyNmE5YjQyMTQxMGQwMDcxMjc0ZGUxIiwiYXVkIjoiY2Fwc3RvbmVwcm9qZWN0IiwiaWF0IjoxNjEzODU5MDc1LCJleHAiOjE2MTM4NjYyNzUsImF6cCI6Im5iTXM2WUtEelhhUXN5a0c5TTRqTUtoMWpvbFlMbmNPIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6YWN0b3IiLCJkZWxldGU6bW92aWUiLCJnZXQ6YWN0b3JzIiwiZ2V0OmFjdG9ycy1pbmZvIiwiZ2V0Om1vdmllcyIsImdldDptb3ZpZXMtaW5mbyIsInBhdGNoOmFjdG9yIiwicGF0Y2g6bW92aWUiLCJwb3N0OmFjdG9yIiwicG9zdDptb3ZpZSJdfQ.PMAkzYVBaymZv3RAmD0xJIuZzYKW4eyqNNyO_3-3EEQg_yxrpUs4SLpydktziUbkiMQB7wWmpfOLzRFaQjZtrxEPIWLvu03mEEz8ShEYAXv20fyTdUlbJ5JgcoUnkTMwU67nSijs1DJhyYh4hVfEg61K1dAvHDnHmtToJD4w1RNZXgEnFybBHi3wynRnv_9b2fRsr0RjqzvxTc5DynFUKE6W7m-v1Dfoaun44kkitq_yXErQSoDcnNoUX486AXgKEnzqPgX5LoenBAJETnhi7Y1T1ePCn_Hes6SPY2qjdvdgiFSNG_kzhomAo3TIDsSjv5rCMVKtYY8lSM34GydEDg'
 
     def tearDown(self):
         """Executed after reach test"""
@@ -98,7 +93,7 @@ class CastingTestCase(unittest.TestCase):
     def test_create_actor(self):
         """Passing Test for POST /actors"""
         res = self.client().post('/actors', headers={
-            'Authorization': "Bearer {}".format(self.Director_Token)
+            'Authorization': "Bearer {}".format(self.Producer_Token)
         }, json=self.VALID_NEW_ACTOR)
         data = json.loads(res.data)
 

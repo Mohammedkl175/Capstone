@@ -35,6 +35,7 @@ This will install all of the required packages.
 
 ## Running the server
 
+uncomment db_drop_and_create_all() in app.py to drops the database tables and starts fresh when you run in localhost
 
 To run the server, execute:
 
@@ -133,9 +134,9 @@ The API will return the following errors based on how the request fails:
 ```
 {
     "actor": {
-        "name": "Haneen Tayseer",
         "age": "27",
-        "gender": "Female"
+        "gender": "Female",
+        "name": "Haneen Tayseer"
     },
     "success": true
 }
@@ -215,17 +216,16 @@ The API will return the following errors based on how the request fails:
  - General
    - deletes the actor
    - requires `delete:actor` permission
-   - will also delete the mapping to the movie but will not delete the movie from the database
  
  - Sample Request
-   - `https://casting-udacity-1993.herokuapp.com/actors/5`
+   - `https://casting-udacity-1993.herokuapp.com/actors/4`
 
 <details>
 <summary>Sample Response</summary>
 
 ```
 {
-    "deleted_actor_id": 5,
+    "deleted_actor_id": 4,
     "success": true
 }
 ```
@@ -296,12 +296,12 @@ The API will return the following errors based on how the request fails:
    - release_year: integer, required
  
  - Sample Request
-   - `https://casting-udacity-1993.herokuapp.com/actors`
+   - `https://casting-udacity-1993.herokuapp.com/movies`
    - Request Body
      ```
         {
             "title": "The Godfather",
-            "release_year": 1971
+            "release_year": "1971"
         }
      ```
 
@@ -323,15 +323,8 @@ The API will return the following errors based on how the request fails:
    - requires `patch:movie` permission
  
  - Request Body (at least one of the following fields required)
-   - title: string, optional
-   - duration: integer, optional
-   - release_year: integer, optional
-   - imdb_rating: float, optional
-   - cast: array of string, non-empty, optional
- 
- - NOTE
-   - Actors passed in the `cast` array in request body will completely replace the existing relationship.
-   - So, if you want to append new actors to a movie, pass the existing actors also in the request.
+   - title: string, required
+   - release_year: integer, required
  
  - Sample Request
    - `https://casting-udacity-1993.herokuapp.com/movies/3`
@@ -361,7 +354,6 @@ The API will return the following errors based on how the request fails:
  - General
    - deletes the movie
    - requires `delete:movie` permission
-   - will not affect the actors present in the database
  
  - Sample Request
    - `https://casting-udacity-1993.herokuapp.com/movies/3`
@@ -379,13 +371,9 @@ The API will return the following errors based on how the request fails:
 </details>
 
 ## Testing
-For testing the backend, run the following commands (in the exact order):
+For testing the backend, run the following commands:
 ```
-dropdb capstone_test
-createdb capstone_test
-psql capstone_test < casting.sql
+drop database capstonetest
+create database capstonetest
 python test.py
 ```
-
-Alternate way: Create the db `capstone_test` using PgAdmin and copy the contents of casting.sql and paste them
-in Query tool in PgAdmin and create the db table with records. Then, run the command `python test.py`.
