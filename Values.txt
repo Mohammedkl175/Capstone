@@ -1,0 +1,13 @@
+truncate table actors RESTART IDENTITY;
+truncate table movies RESTART IDENTITY;
+
+INSERT INTO actors (name,age,gender) VALUES ('Haneen Tayseer',27,'Female');
+INSERT INTO actors (name,age,gender) VALUES ('Mohammed Khalil',27,'Male');
+INSERT INTO actors (name,age,gender) VALUES ('Hussam Khalil',29,'Male');
+INSERT INTO actors (name,age,gender) VALUES ('Ibrahim Khalil',3,'Male');
+
+INSERT INTO movies (title,release_year) VALUES ('Wolf of Wall Street',2013);
+INSERT INTO movies (title,release_year) VALUES ('The Shawshank Redemption',1994);
+
+https://git.heroku.com/casting-udacity-1993.git
+https://casting-udacity-1993.herokuapp.com/
