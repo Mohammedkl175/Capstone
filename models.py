@@ -2,8 +2,12 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Float, Date
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-database_name = "capstone"
-database_path = "postgresql://{}@{}:{}/{}".format("postgres","localhost","5432",database_name)
+#database_name = "capstone"
+#database_path = "postgresql://{}@{}:{}/{}".format("postgres","localhost","5432",database_name)
+#database_filename = "capstone.db"
+#project_dir = os.path.dirname(os.path.abspath(__file__))
+#database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 
@@ -14,14 +18,13 @@ def setup_db(app,database_path=database_path):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
-    db.create_all()
 
 def db_drop_and_create_all():
     """
     drops the database tables and starts fresh
     can be used to initialize a clean database
     """
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
 
 class Movie(db.Model):

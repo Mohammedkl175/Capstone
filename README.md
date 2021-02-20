@@ -202,7 +202,7 @@ The API will return the following errors based on how the request fails:
 {
     "actor_info": {
         "name": "Haneen Arrabi",
-        "date_of_birth": "27",
+        "age": "27",
         "gender": "Female"
     },
     "success": true
