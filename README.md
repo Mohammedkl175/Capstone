@@ -183,9 +183,9 @@ The API will return the following errors based on how the request fails:
    - requires `patch:actor` permission
  
  - Request Body (at least one of the following fields required)
-   - name: string, optional
-   - full_name: string, optional
-   - date_of_birth: date, optional
+   - name: string, required
+   - age: integer, required
+   - gender: string, required
  
  - Sample Request
    - `https://casting-udacity-1993.herokuapp.com/actors/1`
