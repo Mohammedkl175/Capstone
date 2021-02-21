@@ -9,12 +9,13 @@ database_path = os.environ.get('DATABASE_URL')
 db = SQLAlchemy()
 
 
-def setup_db(app,database_path=database_path):
+def setup_db(app, database_path=database_path):
     """binds a flask application and a SQLAlchemy service"""
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
+
 
 def db_drop_and_create_all():
     """
@@ -25,19 +26,21 @@ def db_drop_and_create_all():
     db.create_all()
     init_record()
 
+
 def init_record():
-    actor1 = Actor('Haneen Tayseer',27,'Female')
+    actor1 = Actor('Haneen Tayseer', 27, 'Female')
     actor1.insert()
-    actor2 = Actor('Mohammed Khalil',27,'Male')
+    actor2 = Actor('Mohammed Khalil', 27, 'Male')
     actor2.insert()
-    actor3 = Actor('Hussam Khalil',29,'Male')
+    actor3 = Actor('Hussam Khalil', 29, 'Male')
     actor3.insert()
-    actor4 = Actor('Ibrahim Khalil',3,'Male')
+    actor4 = Actor('Ibrahim Khalil', 3, 'Male')
     actor4.insert()
-    movie1= Movie('Wolf of Wall Street',2013)
+    movie1 = Movie('Wolf of Wall Street', 2013)
     movie1.insert()
-    movie2 = Movie('The Shawshank Redemption',1994)
+    movie2 = Movie('The Shawshank Redemption', 1994)
     movie2.insert()
+
 
 class Movie(db.Model):
     __tablename__ = "movies"
@@ -86,10 +89,10 @@ class Actor(db.Model):
     age = Column(Integer, nullable=False)
     gender = db.Column(String(256), nullable=False)
 
-    def __init__(self, name, age,gender):
+    def __init__(self, name, age, gender):
         self.name = name
         self.age = age
-        self.gender=gender
+        self.gender = gender
 
     def insert(self):
         db.session.add(self)
@@ -112,8 +115,8 @@ class Actor(db.Model):
         return {
             "name": self.name,
             "age": self.age,
-            "gender":self.gender
+            "gender": self.gender
         }
 
     def __repr__(self):
-        return "<Movie {} {} {} />".format(self.name,self.age,self.gender)
+        return "<Movie {} {} {} />".format(self.name, self.age, self.gender)

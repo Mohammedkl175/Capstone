@@ -11,7 +11,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
 
-    #db_drop_and_create_all()
+    # db_drop_and_create_all()
 
     CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -22,7 +22,6 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods',
                              'GET, POST, PATCH, DELETE, OPTIONS')
         return response
-
 
     @app.route('/actors')
     @requires_auth("get:actors")
@@ -35,7 +34,7 @@ def create_app(test_config=None):
                 "success": True,
                 "actors": actors
             })
-        except:
+        except BaseException:
             abort(422)
 
     @app.route('/actors/<int:id>')
@@ -48,7 +47,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "actor": actor.long()
-                })
+            })
 
     @app.route('/actors', methods=['POST'])
     @requires_auth("post:actor")
@@ -58,11 +57,11 @@ def create_app(test_config=None):
             if 'name' not in request_body or 'age' not in request_body or 'gender' not in request_body:
                 raise KeyError
 
-            if request_body['name'] == '' or request_body['age'] == '' or request_body['gender']=='':
+            if request_body['name'] == '' or request_body['age'] == '' or request_body['gender'] == '':
                 raise ValueError
 
             new_actor = Actor(request_body['name'],
-                              request_body['age'],request_body['gender'])
+                              request_body['age'], request_body['gender'])
             new_actor.insert()
 
             return jsonify({
@@ -111,7 +110,7 @@ def create_app(test_config=None):
                 return jsonify({
                     "success": True,
                     "actor_info": actor.long()
-                    })
+                })
 
         except (TypeError, ValueError, KeyError):
             abort(422)
@@ -131,7 +130,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "deleted_actor_id": actor.id
-                })
+            })
 
     @app.route('/movies')
     @requires_auth("get:movies")
@@ -143,8 +142,8 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "movies": movies
-                })
-        except:
+            })
+        except BaseException:
             abort(422)
 
     @app.route('/movies/<int:id>')
@@ -157,7 +156,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "movie": movie.long()
-                })
+            })
 
     @app.route('/movies', methods=['POST'])
     @requires_auth("post:movie")
@@ -181,7 +180,7 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "created_movie_id": new_movie.id
-                })
+            })
 
         except (TypeError, KeyError, ValueError):
             abort(422)
@@ -219,7 +218,7 @@ def create_app(test_config=None):
                 return jsonify({
                     "success": True,
                     "movie_info": movie.long()
-                    })
+                })
 
         except (TypeError, ValueError, KeyError):
             abort(422)
@@ -236,15 +235,15 @@ def create_app(test_config=None):
             return jsonify({
                 "success": True,
                 "deleted_movie_id": movie.id
-                })
+            })
 
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
-            "success": False, 
+            "success": False,
             "error": 422,
             "message": "unprocessable"
-            }), 422
+        }), 422
 
     @app.errorhandler(404)
     def not_found(error):
@@ -252,7 +251,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 404,
             'message': "Resource Not Found"
-            }), 404
+        }), 404
 
     @app.errorhandler(405)
     def not_allowed(error):
@@ -260,7 +259,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 405,
             'message': "Method Not Allowed"
-            }), 405
+        }), 405
 
     @app.errorhandler(400)
     def bad_request(error):
@@ -268,7 +267,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 400,
             'message': "Bad Request"
-            }), 400
+        }), 400
 
     @app.errorhandler(401)
     def Unauthorized(error):
@@ -276,7 +275,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 401,
             'message': "Unauthorized"
-            }), 401
+        }), 401
 
     @app.errorhandler(403)
     def Forbidden(error):
@@ -284,7 +283,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 403,
             'message': "Forbidden"
-            }), 403
+        }), 403
 
     @app.errorhandler(500)
     def Server_Error(error):
@@ -292,13 +291,12 @@ def create_app(test_config=None):
             'success': False,
             'error': 500,
             'message': "Internal Server Error"
-            }), 500
+        }), 500
 
-        
     return app
+
 
 app = create_app()
 
 if __name__ == '__main__':
     app.run()
-
