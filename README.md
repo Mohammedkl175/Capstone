@@ -7,6 +7,14 @@ While running locally: http://localhost:5000
 
 ## Getting Started
 
+## Motivations
+
+1- Database modeling with sqlalchemy & postgres
+2- API to perform CRUD Operations on database by Flask
+3- Automated testing with Unittest
+4- Authorization & Role based Authentification with Auth0
+5- Deployment on Heroku
+
 ### Installing Dependencies
 
 #### Python 3.7
